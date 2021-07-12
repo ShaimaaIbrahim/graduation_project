@@ -15,27 +15,28 @@ class NotificationProvider extends ChangeNotifier {
   var _auth = FirebaseAuth.instance;
   var currentDate = DateTime.now();
 
-  Future<Map<String, dynamic>> getStudentNotifications() async {
+  Future<void> getStudentNotifications() async {
     List<Lecture> notificationsData = [];
-    Student student;
+    Student? student;
     final Map<String, dynamic> result = {'success': false, 'error': null};
 
     try {
       await db
           .collection('students')
-          .doc(_auth.currentUser.uid)
+          .doc(_auth.currentUser!.uid)
           .get()
           .then((value) => {
                 student = Student(
                   section: value.get('section'),
                   department: value.get('department'),
+                  abscence: false,
                 )
               });
 
       var lectures = await db
           .collection('notifications')
-          .where('section', isEqualTo: student.section)
-          .where('department', isEqualTo: student.department)
+          .where('section', isEqualTo: student!.section!)
+          .where('department', isEqualTo: student!.department)
           .get();
       lectures.docs.forEach((lec) {
         var lecData = Lecture(

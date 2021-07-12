@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_background_location/flutter_background_location.dart';
 import 'package:untitled2/pages/add_lecture_screen/add_lecture.dart';
 import 'package:untitled2/pages/departments_screen/DepartmentScreen.dart';
 import 'package:untitled2/pages/edit_profile/EditDoctorProfile.dart';
 import 'package:untitled2/pages/history_screen/DoctorHistoryScreen.dart';
+import 'package:untitled2/pages/intro_screen/intro_screen_component.dart';
 import 'package:untitled2/pages/search_students/search_students.dart';
 import 'package:untitled2/provider/DoctorMainScreenProvider.dart';
 import 'package:untitled2/provider/DoctorProvider.dart';
 import 'package:untitled2/utilities/constants.dart';
 
 class MyDrawer extends StatelessWidget {
-  const MyDrawer({Key key}) : super(key: key);
+  const MyDrawer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class MyDrawer extends StatelessWidget {
                     SizedBox(
                       height: 10,
                     ),
-                    Text(provider.Me.name),
+                    Text(provider.Me.name!),
                   ],
                 ),
               ),
@@ -100,8 +100,10 @@ class MyDrawer extends StatelessWidget {
                 title: Text('LogOut'),
                 onTap: () {
                   Provider.of<DoctorProvider>(context).signOut();
-                  Navigator.popUntil(context, ModalRoute.withName('/intro'));
-                  // BackgroundLocation.stopLocationService();
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => IntroScreen()));
                 },
               ),
             ],

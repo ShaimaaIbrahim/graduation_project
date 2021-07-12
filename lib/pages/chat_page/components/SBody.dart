@@ -12,9 +12,9 @@ TextEditingController messageController = TextEditingController();
 ScrollController scrollController = ScrollController();
 
 FirebaseAuth _auth = FirebaseAuth.instance;
-String currentDate;
-List<GroupMessage> messages;
-User currentUser = _auth.currentUser;
+String? currentDate;
+List<GroupMessage>? messages;
+User currentUser = _auth.currentUser!;
 String uid = currentUser.uid;
 
 Widget content = Container(
@@ -22,10 +22,11 @@ Widget content = Container(
 );
 
 class SBody extends StatelessWidget {
-  final Student receiver;
-  final Student sender;
+  final Student? receiver;
+  final Student? sender;
 
-  const SBody({Key key, this.receiver, this.sender}) : super(key: key);
+  const SBody({Key? key, required this.receiver, required this.sender})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -48,9 +49,9 @@ class SBody extends StatelessWidget {
                   controller: scrollController,
                   itemBuilder: (context, i) {
                     return MessageItem(
-                      senderName: data.singleMessages[i].senderName,
-                      senderId: data.singleMessages[i].senderId,
-                      text: data.singleMessages[i].message,
+                      senderName: data.singleMessages[i].senderName!,
+                      senderId: data.singleMessages[i].senderId!,
+                      text: data.singleMessages[i].message!,
                     );
                   },
                 );
@@ -102,17 +103,17 @@ class SBody extends StatelessWidget {
   ) async {
     if (messageController.text.length > 0) {
       Provider.of<ChatProvider>(context, listen: false).addSingleMessage(
-          currentDate,
+          currentDate!,
           messageController.text,
-          sender.uid,
-          sender.name,
-          receiver.uid,
-          receiver.name);
+          sender!.uid,
+          sender!.name,
+          receiver!.uid,
+          receiver!.name);
     }
     messageController.clear();
 
     Provider.of<ChatProvider>(context)
-        .fetchSingleMessages(sender.uid, receiver.uid);
+        .fetchSingleMessages(sender!.uid, receiver!.uid);
 
     scrollController.animateTo(scrollController.position.maxScrollExtent,
         duration: const Duration(milliseconds: 1000), curve: Curves.easeOut);

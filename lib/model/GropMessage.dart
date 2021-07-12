@@ -1,14 +1,14 @@
 class GroupMessage {
-  String date;
-  String message;
+  String? date;
+  String? message;
 
-  String senderName;
-  String senderImage;
+  String? senderName;
+  String? senderImage;
 
-  String senderSection;
-  String senderDepartment;
+  String? senderSection;
+  String? senderDepartment;
 
-  String senderId;
+  String? senderId;
 
   GroupMessage(
       {this.date,

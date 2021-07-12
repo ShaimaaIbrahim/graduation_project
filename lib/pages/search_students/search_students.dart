@@ -5,7 +5,7 @@ import 'package:untitled2/provider/StudentProvider.dart';
 import 'package:untitled2/utilities/constants.dart';
 
 class SearchStudents extends StatefulWidget {
-  const SearchStudents({Key key}) : super(key: key);
+  const SearchStudents({Key? key}) : super(key: key);
 
   @override
   _SearchStudentsState createState() => _SearchStudentsState();
@@ -23,7 +23,7 @@ class _SearchStudentsState extends State<SearchStudents> {
   String _searchText = "";
   List<Student> names = [];
   List<Student> filteredNames = [];
-  List<Student> students;
+  List<Student>? students;
 
   /// listeners to textEditing-----
   _SearchStudentsState() {
@@ -67,7 +67,7 @@ class _SearchStudentsState extends State<SearchStudents> {
       List<Student> tempList = [];
       for (int i = 0; i < filteredNames.length; i++) {
         if (filteredNames[i]
-            .name
+            .name!
             .toLowerCase()
             .contains(_searchText.toLowerCase())) {
           tempList.add(filteredNames[i]);
@@ -80,9 +80,9 @@ class _SearchStudentsState extends State<SearchStudents> {
       itemCount: names == null ? 0 : filteredNames.length,
       itemBuilder: (BuildContext context, int index) {
         return ListTile(
-          title: Text(filteredNames[index].name),
-          subtitle: Text(filteredNames[index].number),
-          trailing: Text(filteredNames[index].section),
+          title: Text(filteredNames[index].name!),
+          subtitle: Text(filteredNames[index].number!),
+          trailing: Text(filteredNames[index].section!),
           leading: Image.asset('assets/images/user.png'),
         );
       },
@@ -95,7 +95,7 @@ class _SearchStudentsState extends State<SearchStudents> {
 
     List<Student> tempList = [];
 
-    students.forEach((element) {
+    students!.forEach((element) {
       tempList.add(element);
     });
     setState(() {

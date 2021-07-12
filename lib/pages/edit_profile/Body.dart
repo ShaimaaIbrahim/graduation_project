@@ -5,14 +5,17 @@ import 'package:untitled2/provider/EditProfileProvider.dart';
 import 'package:untitled2/utilities/constants.dart';
 import 'package:untitled2/widgets/rounded_widget.dart';
 
-EditProfileProvider provider;
+EditProfileProvider? provider;
 
 class Body extends StatelessWidget {
   final Student me;
   final TextEditingController nameTextFieldValue;
   final TextEditingController numberTextFieldValue;
 
-  Body({this.me, this.nameTextFieldValue, this.numberTextFieldValue});
+  Body(
+      {required this.me,
+      required this.nameTextFieldValue,
+      required this.numberTextFieldValue});
 
   @override
   Widget build(BuildContext context) {
@@ -96,8 +99,8 @@ class Body extends StatelessWidget {
         iconSize: 24,
         elevation: 16,
         style: TextStyle(color: primaryLight, fontSize: 18),
-        onChanged: (String data) {
-          provider.setInitialDepartment(data);
+        onChanged: (String? data) {
+          provider.setInitialDepartment(data!);
 
           if (provider.initialDepartment == departments[0]) {
             provider.setSectionsList(arch_classes);
@@ -134,8 +137,8 @@ class Body extends StatelessWidget {
         iconSize: 24,
         elevation: 16,
         style: TextStyle(color: primaryLight, fontSize: 18),
-        onChanged: (String data) {
-          provider.setInitialSection(data);
+        onChanged: (String? data) {
+          provider.setInitialSection(data!);
         },
         items: provider.sections.map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(

@@ -5,16 +5,15 @@ import 'package:untitled2/model/GropMessage.dart';
 import 'package:untitled2/model/Student.dart';
 import 'package:untitled2/provider/ChatProvider.dart';
 import 'package:untitled2/utilities/constants.dart';
-
 import 'message_list_item.dart';
 
 TextEditingController messageController = TextEditingController();
 ScrollController scrollController = ScrollController();
 
 FirebaseAuth _auth = FirebaseAuth.instance;
-String currentDate;
-List<GroupMessage> messages;
-User currentUser = _auth.currentUser;
+String? currentDate;
+List<GroupMessage>? messages;
+User currentUser = _auth.currentUser!;
 String uid = currentUser.uid;
 
 Widget content = Container(
@@ -25,7 +24,7 @@ ChatProvider provider = ChatProvider();
 class Body extends StatelessWidget {
   final Student me;
 
-  const Body({Key key, this.me}) : super(key: key);
+  const Body({Key? key, required this.me}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -49,9 +48,9 @@ class Body extends StatelessWidget {
                   controller: scrollController,
                   itemBuilder: (context, i) {
                     return MessageItem(
-                      senderName: data.messages[i].senderName,
-                      senderId: data.messages[i].senderId,
-                      text: data.messages[i].message,
+                      senderName: data.messages[i].senderName!,
+                      senderId: data.messages[i].senderId!,
+                      text: data.messages[i].message!,
                     );
                   },
                 );

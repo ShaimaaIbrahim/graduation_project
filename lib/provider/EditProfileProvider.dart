@@ -31,7 +31,7 @@ class EditProfileProvider extends ChangeNotifier {
       BuildContext context, String name, String number) async {
     final Map<String, dynamic> result = {'success': false, 'error': null};
     try {
-      await db.collection('students').doc(_auth.currentUser.uid).update({
+      await db.collection('students').doc(_auth.currentUser!.uid).update({
         "name": name,
         "number": number,
         "section": this.initialSection,
@@ -50,7 +50,7 @@ class EditProfileProvider extends ChangeNotifier {
     final Map<String, dynamic> result = {'success': false, 'error': null};
 
     try {
-      await db.collection('doctors').doc(_auth.currentUser.uid).update({
+      await db.collection('doctors').doc(_auth.currentUser!.uid).update({
         "name": name,
         "email": email,
       });

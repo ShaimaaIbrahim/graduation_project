@@ -25,20 +25,22 @@ class _AddLectureScreenState extends State<AddLectureScreen> {
 
   DateTime dateTime = DateTime.now();
 
-  String nameValue;
+  String? nameValue;
   var initialDate = "ساعة";
   List<String> times = ["ساعة", "دقيقة"];
 
   Future<void> onSubmit() async {
     print("submit store lecture at lecturers============");
 
-    if (dateController == null || timeController == null || nameValue.isEmpty) {
+    if (dateController == null ||
+        timeController == null ||
+        nameValue!.isEmpty) {
       print("fields are empty");
 
       _showMyDialog('Empty Fields');
     } else if (dateController != null &&
         timeController != null &&
-        nameValue.isNotEmpty) {
+        nameValue!.isNotEmpty) {
       print("fields not empty");
 
       var result =
@@ -103,18 +105,18 @@ class _AddLectureScreenState extends State<AddLectureScreen> {
         initialTime: TimeOfDay.now(),
         context: context,
       );
-      timeController.text = time.format(context);
+      timeController.text = time!.format(context);
     }
 
     //function to select date
     Future<void> _selectDate(BuildContext context) async {
-      final DateTime date = await showDatePicker(
+      final DateTime? date = await showDatePicker(
           context: context,
           initialDate: currentDate,
           firstDate: DateTime(2015),
           lastDate: DateTime(2050));
       if (date != null && date != currentDate) dateTime = date;
-      dateController.text = "${date.day}/ ${date.month} / ${date.year}";
+      dateController.text = "${date!.day}/ ${date.month} / ${date.year}";
     }
 
     @override
@@ -172,9 +174,9 @@ class _AddLectureScreenState extends State<AddLectureScreen> {
                   iconSize: 24,
                   elevation: 16,
                   style: TextStyle(color: Colors.black, fontSize: 18),
-                  onChanged: (String data) {
+                  onChanged: (String? data) {
                     setState(() {
-                      initialDepartment = data;
+                      initialDepartment = data!;
                       if (initialDepartment == departments[0]) {
                         sections = arch_classes;
                         initialSection = arch_classes[0];
@@ -218,9 +220,9 @@ class _AddLectureScreenState extends State<AddLectureScreen> {
                     iconSize: 24,
                     elevation: 16,
                     style: TextStyle(color: Colors.black, fontSize: 18),
-                    onChanged: (String data) {
+                    onChanged: (String? data) {
                       setState(() {
-                        initialSection = data;
+                        initialSection = data!;
                       });
                     },
                     items:
@@ -339,9 +341,9 @@ class _AddLectureScreenState extends State<AddLectureScreen> {
       iconSize: 24,
       elevation: 16,
       style: TextStyle(color: primaryLight, fontSize: 18),
-      onChanged: (String data) {
+      onChanged: (String? data) {
         setState(() {
-          initialDate = data;
+          initialDate = data!;
         });
       },
       items: times.map<DropdownMenuItem<String>>((String value) {

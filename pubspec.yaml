@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.10.4 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -28,29 +28,29 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons:
-  camera: ^0.5.8+5
-  path:
   tflite_flutter: ^0.9.0
   image:
+  image_picker: ^0.8.1+3
+  permission_handler: ^6.0.1
   firebase_ml_vision: ^0.9.6+2
   provider:
-  path_provider: ^2.0.2
+  camera: ^0.8.1+4
+  meta: ^1.3.0
+  open_file: ^3.1.0
   ffi: ^1.0.0
-  firebase_auth:
-  cloud_firestore:
-  firebase_core:
-  shared_preferences:
-  meta:
-  flappy_search_bar:
-  image_picker:
-  keyboard_visibility:
   flutter_svg:
-  geolocator:
-  google_sign_in:
-  flutter_facebook_auth:
-  flutter_background_location:
-  screenshot:
-  pdf:
+  firebase_auth: ^2.0.0
+  cloud_firestore: ^2.3.0
+  firebase_core: ^1.3.0
+  shared_preferences:
+  excel:
+  background_location: ^0.6.1
+  geolocator: ^7.2.0+1
+  flappy_search_bar:
+  keyboard_visibility:
+  google_sign_in: ^5.0.4
+  flutter_facebook_auth: "^1.0.0"
+
 
 dev_dependencies:
   flutter_test:
@@ -74,6 +74,7 @@ flutter:
     - assets/images/student.png
     - assets/images/user.png
     - assets/images/exam.png
+    - assets/images/teacher.png
     - assets/fonts/
     - assets/icons/
   # An image asset can refer to one or more resolution-specific "variants", see

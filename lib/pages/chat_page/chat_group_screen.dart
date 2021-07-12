@@ -6,7 +6,7 @@ import 'components/body.dart';
 class GroupChat extends StatelessWidget {
   final Student me;
 
-  const GroupChat({Key key, this.me}) : super(key: key);
+  const GroupChat({Key? key, required this.me}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

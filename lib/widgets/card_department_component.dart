@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:untitled2/utilities/constants.dart';
 
 class DepartmentCard extends StatefulWidget {
-  DepartmentCard({this.departname});
+  DepartmentCard({required this.departname});
 
   String departname;
 

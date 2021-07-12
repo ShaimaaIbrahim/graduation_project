@@ -8,10 +8,10 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:untitled2/model/Doctor.dart';
 
 class DoctorProvider extends ChangeNotifier {
-  Doctor _doctor;
+  Doctor? _doctor;
   bool _isLoading = false;
   bool _isAuthenticated = false;
-  List<Doctor> _allDoctors;
+  List<Doctor>? _allDoctors;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -19,22 +19,20 @@ class DoctorProvider extends ChangeNotifier {
 
   bool get isAuthenticated => _isAuthenticated;
 
-  Doctor get doctor => _doctor;
-  List<Doctor> get allDoctor => _allDoctors;
+  Doctor? get doctor => _doctor;
+  List<Doctor> get allDoctor => _allDoctors!;
 
   Future<Map<String, dynamic>> signUp(
-      {String name, String email, String password}) async {
+      {required String name, email, password}) async {
     Map<String, dynamic> result = {'success': false, 'error': null};
 
     _isLoading = true;
     notifyListeners();
 
     try {
-      final User doctor = (await _auth.createUserWithEmailAndPassword(
+      final User? doctor = (await _auth.createUserWithEmailAndPassword(
               email: email.trim(), password: password))
           .user;
-
-      print("user email is  " + doctor.email);
 
       if (doctor != null) {
         final Map<String, dynamic> userData = {
@@ -75,14 +73,15 @@ class DoctorProvider extends ChangeNotifier {
     return result;
   }
 
-  Future<Map<String, dynamic>> signIn({String email, String password}) async {
+  Future<Map<String, dynamic>> signIn(
+      {required String email, required String password}) async {
     final Map<String, dynamic> result = {'success': false, 'error': null};
 
     _isLoading = true;
     notifyListeners();
 
     try {
-      final User user = (await _auth.signInWithEmailAndPassword(
+      final User? user = (await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       ))
@@ -112,7 +111,7 @@ class DoctorProvider extends ChangeNotifier {
     final Map<String, dynamic> result = {'success': false, 'error': null};
     final user = _auth.currentUser;
     await _auth.signOut().then((value) {
-      storeAuthUser(user.uid);
+      storeAuthUser(user!.uid);
       result['success'] = true;
     }).catchError((error) {
       result['error'] = error;
@@ -186,11 +185,11 @@ class DoctorProvider extends ChangeNotifier {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     bool isAuthenticated;
     preferences.getBool('userExistence') != null
-        ? isAuthenticated = preferences.getBool('userExistence')
+        ? isAuthenticated = preferences.getBool('userExistence')!
         : isAuthenticated = false;
     if (isAuthenticated) {
-      String uId = preferences.getString('doctorId');
-      final userData = await fetchUserData(uId);
+      String? uId = preferences.getString('doctorId');
+      final userData = await fetchUserData(uId!);
       if (userData['success']) {
         _isAuthenticated = true;
       } else {
@@ -214,7 +213,7 @@ class DoctorProvider extends ChangeNotifier {
 
   Future<Map<String, dynamic>> getDoctorInfo() async {
     String doctorId = "";
-    Doctor doctor;
+    Doctor? doctor;
 
     final Map<String, dynamic> result = {'success': false, 'error': null};
 
@@ -224,7 +223,7 @@ class DoctorProvider extends ChangeNotifier {
 
     if (preferences.getBool('userExistence') != null &&
         preferences.getString('userId') != null) {
-      doctorId = preferences.getString('userId');
+      doctorId = preferences.getString('userId')!;
 
       print("doctor preferences id is $doctorId ");
 
@@ -294,7 +293,7 @@ class DoctorProvider extends ChangeNotifier {
     Map<String, dynamic> result = {'success': false, 'error': null};
 
     String doctorId = "";
-    Doctor doctor;
+    Doctor? doctor;
 
     _isLoading = true;
     notifyListeners();
@@ -303,7 +302,7 @@ class DoctorProvider extends ChangeNotifier {
 
     if (preferences.getBool('doctorExistence') != null &&
         preferences.getString('doctorId') != null) {
-      doctorId = preferences.getString('studentId');
+      doctorId = preferences.getString('studentId')!;
 
       print("student preferences id is $doctorId ");
 
@@ -321,10 +320,10 @@ class DoctorProvider extends ChangeNotifier {
               });
 
       Map<String, dynamic> studentMap = {
-        "name": doctor.name,
-        "uid": doctor.uid,
-        "email": doctor.email,
-        "password": doctor.password,
+        "name": doctor!.name,
+        "uid": doctor!.uid,
+        "email": doctor!.email,
+        "password": doctor!.password,
         "imagePath": imageUrl
       };
 
@@ -364,7 +363,7 @@ class DoctorProvider extends ChangeNotifier {
       } else {
         userCredential = await googleConfigurations();
       }
-      user = userCredential.user;
+      user = userCredential.user!;
       if (user != null) {
         bool exist = await checkUserExistence(user.uid);
         if (!exist) {
@@ -412,10 +411,11 @@ class DoctorProvider extends ChangeNotifier {
   Future<UserCredential> googleConfigurations() async {
     UserCredential userCredential;
     final GoogleSignIn googleSignIn = GoogleSignIn();
-    final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+    final GoogleSignInAccount? googleSignInAccount =
+        await googleSignIn.signIn();
     final GoogleSignInAuthentication googleSignInAuthentication =
-        await googleSignInAccount.authentication;
-    GoogleAuthCredential googleAuthCredential = GoogleAuthProvider.credential(
+        await googleSignInAccount!.authentication;
+    OAuthCredential googleAuthCredential = GoogleAuthProvider.credential(
         idToken: googleSignInAuthentication.idToken,
         accessToken: googleSignInAuthentication.accessToken);
     userCredential = await _auth.signInWithCredential(googleAuthCredential);

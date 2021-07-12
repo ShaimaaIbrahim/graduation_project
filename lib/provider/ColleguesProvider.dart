@@ -28,7 +28,7 @@ class ColleguesProvider extends ChangeNotifier {
       var student;
       await db
           .collection('students')
-          .doc(_auth.currentUser.uid)
+          .doc(_auth.currentUser!.uid)
           .get()
           .then((value) => {
                 student = Student(
@@ -67,6 +67,8 @@ class ColleguesProvider extends ChangeNotifier {
     }
     _isLoading = false;
     notifyListeners();
+
+    return result;
   }
 
   void navigateToSingleChat(Student myCollegu, BuildContext context) {

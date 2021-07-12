@@ -9,7 +9,7 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  List<Doctor> doctors;
+  List<Doctor>? doctors;
 
   @override
   void initState() {
@@ -32,21 +32,21 @@ class _BodyState extends State<Body> {
             Consumer<DoctorProvider>(
               builder: (context, docData, child) {
                 Widget content = Center(child: Text('No Doctors'));
-                if (doctors.length > 0) {
+                if (doctors!.length > 0) {
                   content = Center(
                     child: Container(
                       color: Colors.white,
                       margin: EdgeInsets.all(5),
                       alignment: Alignment.center,
                       child: ListView.builder(
-                          itemCount: doctors.length,
+                          itemCount: doctors!.length,
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
                           itemBuilder: (BuildContext context, index) {
                             return ListTile(
-                              title: Text(doctors[index].name.toString()),
+                              title: Text(doctors![index].name.toString()),
                               subtitle: Text(
-                                  doctors[index].email.substring(0, 7) +
+                                  doctors![index].email!.substring(0, 7) +
                                       "@gmail.com"),
                               leading: Image.asset('assets/images/user.png'),
                             );

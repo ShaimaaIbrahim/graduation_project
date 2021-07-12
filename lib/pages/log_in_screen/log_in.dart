@@ -10,7 +10,7 @@ import 'package:untitled2/utilities/constants.dart';
 class LogInScreen extends StatefulWidget {
   static String routeName = '/login';
 
-  int log;
+  int? log;
   LogInScreen({this.log});
 
   @override
@@ -18,15 +18,15 @@ class LogInScreen extends StatefulWidget {
 }
 
 class _LogInScreenState extends State<LogInScreen> {
-  String emailTextField;
-  String passwordTextFied;
+  String? emailTextField;
+  String? passwordTextFied;
 
   bool isShown = true;
 
   Future<void> onSubmitDoctor() async {
-    if (emailTextField.isEmpty || passwordTextFied.isEmpty) {
+    if (emailTextField!.isEmpty || passwordTextFied!.isEmpty) {
       _showMyDialog('Not Leave Empty Fields');
-    } else if (emailTextField.isNotEmpty && passwordTextFied.isNotEmpty) {
+    } else if (emailTextField!.isNotEmpty && passwordTextFied!.isNotEmpty) {
       final result = await Provider.of<DoctorProvider>(context, listen: false)
           .signIn(
               email: emailTextField.toString().trim(),
@@ -46,9 +46,9 @@ class _LogInScreenState extends State<LogInScreen> {
   }
 
   Future<void> onSubmitStudent() async {
-    if (emailTextField.isEmpty || passwordTextFied.isEmpty) {
+    if (emailTextField!.isEmpty || passwordTextFied!.isEmpty) {
       _showMyDialog('Not Leave Empty Fields');
-    } else if (emailTextField.isNotEmpty && passwordTextFied.isNotEmpty) {
+    } else if (emailTextField!.isNotEmpty && passwordTextFied!.isNotEmpty) {
       final result = await Provider.of<StudentProvider>(context, listen: false)
           .signIn(
               email: emailTextField.toString().trim(),

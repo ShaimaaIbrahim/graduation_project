@@ -22,23 +22,24 @@ class ChatProvider extends ChangeNotifier {
     final Map<String, dynamic> result = {'success': false, 'error': null};
     List<GroupMessage> messagesList = [];
 
-    Student student;
+    Student? student;
 
     try {
       await db
           .collection('students')
-          .doc(_auth.currentUser.uid)
+          .doc(_auth.currentUser!.uid)
           .get()
           .then((value) => {
                 student = Student(
                   section: value.get('section'),
                   department: value.get('department'),
+                  abscence: false,
                 )
               });
       var snapshot = await db
           .collection('messages')
-          .where("senderSection", isEqualTo: student.section)
-          .where("senderDepartment", isEqualTo: student.department)
+          .where("senderSection", isEqualTo: student!.section)
+          .where("senderDepartment", isEqualTo: student!.department)
           .get()
           .catchError((error) {
         result['error'] = error;
@@ -135,18 +136,17 @@ class ChatProvider extends ChangeNotifier {
   Future<Map<String, dynamic>> fetchSingleMessages(senderId, receiverId) async {
     final Map<String, dynamic> result = {'success': false, 'error': null};
     List<SingleMessage> messagesList = [];
-
-    Student student;
-
+    Student? student;
     try {
       await db
           .collection('students')
-          .doc(_auth.currentUser.uid)
+          .doc(_auth.currentUser!.uid)
           .get()
           .then((value) => {
                 student = Student(
                   section: value.get('section'),
                   department: value.get('department'),
+                  abscence: false,
                 )
               });
       var snapshot = await db.collection('chats').get().catchError((error) {

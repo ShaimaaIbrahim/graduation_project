@@ -4,13 +4,14 @@ import 'package:untitled2/pages/chat_page/chat_group_screen.dart';
 import 'package:untitled2/pages/collegues_screen/ColleguesScreen.dart';
 import 'package:untitled2/pages/edit_profile/EditProfileScreen.dart';
 import 'package:untitled2/pages/history_screen/StudentHistoryScreen.dart';
+import 'package:untitled2/pages/intro_screen/intro_screen_component.dart';
 import 'package:untitled2/pages/notification_screen/notification_page.dart';
 import 'package:untitled2/provider/StudentMainScreenProvider.dart';
 import 'package:untitled2/provider/StudentProvider.dart';
 import 'package:untitled2/utilities/constants.dart';
 
 class MyDrawer extends StatelessWidget {
-  const MyDrawer({Key key}) : super(key: key);
+  const MyDrawer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,11 +34,11 @@ class MyDrawer extends StatelessWidget {
                   SizedBox(
                     height: 10,
                   ),
-                  Text(provider.Me.name),
+                  Text(provider.Me.name!),
                   SizedBox(
                     height: 7,
                   ),
-                  Text(provider.Me.number),
+                  Text(provider.Me.number!),
                 ],
               ),
             ),
@@ -99,7 +100,10 @@ class MyDrawer extends StatelessWidget {
               title: Text('LogOut'),
               onTap: () {
                 Provider.of<StudentProvider>(context).signOut();
-                Navigator.popUntil(context, ModalRoute.withName('/intro'));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => IntroScreen()));
               },
             ),
           ],

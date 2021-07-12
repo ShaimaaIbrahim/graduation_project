@@ -6,8 +6,6 @@ import 'package:path/path.dart';
 import 'dart:io';
 import 'dart:math' as math;
 import 'package:path/path.dart' show join;
-import 'package:path_provider/path_provider.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled2/database/database.dart';
 import 'package:untitled2/pages/student_main_screen/StudentMainScreen.dart';
@@ -16,6 +14,7 @@ import 'package:untitled2/services/facenet.service.dart';
 import 'package:untitled2/services/ml_vision_service.dart';
 import 'package:untitled2/utilities/FacePainter.dart';
 import 'package:untitled2/utilities/constants.dart';
+import 'package:path/path.dart' as Path;
 
 class DetectionSignUpScreen extends StatefulWidget {
   static String routeName = "/detection";
@@ -28,17 +27,16 @@ class DetectionSignUpScreen extends StatefulWidget {
 }
 
 class _DetectionSignUpScreenState extends State<DetectionSignUpScreen> {
-  String imagePath;
-  Face faceDetected;
-  Size imageSize;
+  String? imagePath;
+  Face? faceDetected;
+  Size? imageSize;
 
   bool _detectingFaces = false;
   bool pictureTaked = false;
 
-  Future _initializeControllerFuture;
+  Future? _initializeControllerFuture;
   bool cameraInitializated = false;
 
-  // switchs when the user press the camera
   bool _saving = false;
 
   // service injection
@@ -79,29 +77,6 @@ class _DetectionSignUpScreenState extends State<DetectionSignUpScreen> {
   }
 
   /// handles the button pressed event
-  Future<bool> onShot() async {
-    print('onShot performed');
-
-    if (faceDetected == null) {
-      return false;
-    } else {
-      imagePath =
-          join(Directory("storage/emulated/0/").path, '${DateTime.now()}.png');
-
-      _saving = true;
-
-      await Future.delayed(Duration(milliseconds: 500));
-      await _cameraService.cameraController.stopImageStream();
-      await Future.delayed(Duration(milliseconds: 200));
-      await _cameraService.takePicture(imagePath);
-
-      setState(() {
-        pictureTaked = true;
-      });
-
-      return true;
-    }
-  }
 
   /// draws rectangles when detects faces
   _frameFaces() {
@@ -124,17 +99,12 @@ class _DetectionSignUpScreenState extends State<DetectionSignUpScreen> {
 
             /// happens when take image shot with camera , starting image predection
             if (_saving) {
-              _faceNetService.setCurrentPrediction(image, faceDetected);
+              _faceNetService.setCurrentPrediction(image, faceDetected!);
               List predictedData = _faceNetService.predictedData;
 
-              /// creates a new user in the 'database'
-              final SharedPreferences preferences =
-                  await SharedPreferences.getInstance();
-
-              if (preferences.getString('studentId') != null) {
-                await _dataBaseService.saveData(
-                    preferences.getString('studentId'), predictedData);
-              }
+              await _dataBaseService.loadDB();
+              await _dataBaseService.saveData(
+                  FirebaseAuth.instance.currentUser!.uid, predictedData);
 
               /// resets the face stored in the face net sevice
               this._faceNetService.setPredictedData(null);
@@ -158,10 +128,35 @@ class _DetectionSignUpScreenState extends State<DetectionSignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-//    Provider.of<PrecenceProvider>(context, listen: false).getStudentLecturers();
+    Future<bool> onShot() async {
+      print('onShot performed');
+
+      if (faceDetected == null) {
+        return false;
+      } else {
+        await Future.delayed(Duration(milliseconds: 500));
+        //await _cameraService.cameraController.stopImageStream();
+        await Future.delayed(Duration(milliseconds: 200));
+        XFile file = await _cameraService.cameraController.takePicture();
+        imagePath = file.path;
+        setState(() {
+          _saving = true;
+        });
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => StudentMainScreen()),
+        );
+        setState(() {
+          pictureTaked = true;
+        });
+
+        return true;
+      }
+    }
 
     final double mirror = math.pi;
     final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
 
     return Scaffold(
       body: FutureBuilder<void>(
@@ -173,35 +168,22 @@ class _DetectionSignUpScreenState extends State<DetectionSignUpScreen> {
                 width: width,
                 child: Transform(
                     alignment: Alignment.center,
-                    child: Image.file(File(imagePath)),
+                    child: Image.file(File(imagePath!)),
                     transform: Matrix4.rotationY(mirror)),
               );
             } else {
-              return Transform.scale(
-                scale: 1.0,
-                child: AspectRatio(
-                  aspectRatio: MediaQuery.of(context).size.aspectRatio,
-                  child: OverflowBox(
-                    alignment: Alignment.center,
-                    child: FittedBox(
-                      fit: BoxFit.fitHeight,
-                      child: Container(
-                        width: width,
-                        height: width /
-                            _cameraService.cameraController.value.aspectRatio,
-                        child: Stack(
-                          fit: StackFit.expand,
-                          children: <Widget>[
-                            CameraPreview(_cameraService.cameraController),
-                            CustomPaint(
-                              painter: FacePainter(
-                                  face: faceDetected, imageSize: imageSize),
-                            ),
-                          ],
-                        ),
-                      ),
+              return Container(
+                width: width,
+                height: height,
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: <Widget>[
+                    CameraPreview(_cameraService.cameraController),
+                    CustomPaint(
+                      painter:
+                          FacePainter(face: faceDetected, imageSize: imageSize),
                     ),
-                  ),
+                  ],
                 ),
               );
             }
@@ -220,8 +202,6 @@ class _DetectionSignUpScreenState extends State<DetectionSignUpScreen> {
             /// on shot action to take picture
             if (faceDetected != null) {
               onShot();
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => StudentMainScreen()));
             }
           }),
     );

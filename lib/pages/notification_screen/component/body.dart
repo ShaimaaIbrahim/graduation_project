@@ -4,7 +4,7 @@ import 'package:untitled2/pages/notification_screen/component/notification_list_
 import 'package:untitled2/provider/NotificationProvider.dart';
 
 class Body extends StatelessWidget {
-  const Body({Key key}) : super(key: key);
+  const Body({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -2,8 +2,8 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
 class SectionListItem extends StatefulWidget {
-  String sectionName;
-  Color color;
+  String? sectionName;
+  Color? color;
 
   SectionListItem({this.sectionName, this.color});
 

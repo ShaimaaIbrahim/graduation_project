@@ -4,11 +4,11 @@ import 'package:untitled2/utilities/constants.dart';
 
 class SocialButton extends StatelessWidget {
   const SocialButton({
-    Key key,
-    @required this.buttonColor,
-    @required this.text,
-    @required this.icon,
-    @required this.onPress,
+    Key? key,
+    required this.buttonColor,
+    required this.text,
+    required this.icon,
+    required this.onPress,
   }) : super(key: key);
   final Color buttonColor;
   final String text;
@@ -20,10 +20,10 @@ class SocialButton extends StatelessWidget {
       margin: EdgeInsets.only(left: 10, right: 10),
       height: 60,
       child: FlatButton(
-          onPressed: onPress,
           color: buttonColor,
           textColor: primaryDark,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+          onPressed: () {},
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

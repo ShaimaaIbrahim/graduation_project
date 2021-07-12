@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class SingleMessage {
-  String senderId;
-  String receiverId;
-  String senderName;
-  String receiverName;
-  String message;
-  String date;
+  String? senderId;
+  String? receiverId;
+  String? senderName;
+  String? receiverName;
+  String? message;
+  String? date;
 
   SingleMessage(
       {this.senderId,

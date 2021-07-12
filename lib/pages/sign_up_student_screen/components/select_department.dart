@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:untitled2/utilities/constants.dart';
 
 class CardSelectDepart extends StatefulWidget {
-  CardSelectDepart({this.icon});
-
+  CardSelectDepart({required this.icon});
   IconData icon;
 
   @override
@@ -30,9 +29,9 @@ class _CardSelectDepartState extends State<CardSelectDepart> {
             iconSize: 24,
             elevation: 16,
             style: TextStyle(color: primaryLight, fontSize: 18),
-            onChanged: (String data) {
+            onChanged: (String? data) {
               setState(() {
-                dropdownValue = data;
+                dropdownValue = data!;
               });
             },
             items: departments.map<DropdownMenuItem<String>>((String value) {

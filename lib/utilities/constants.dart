@@ -29,6 +29,9 @@ const String kInvalidPhoneNumberError = "Please Enter Valid Phone Number";
 const String kAddressNullError = "Please Enter your address";
 const String kItemNullError = "Please Enter An Item";
 
+final PATH = "/storage/emulated/0/Android/data/com.example.untitled2/files/";
+final PATH_PIC = "/storage/emulated/0/Pictures/";
+
 ThemeData buildTheme() {
   final ThemeData base = ThemeData();
   return base.copyWith(

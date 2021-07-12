@@ -4,7 +4,7 @@ import 'package:untitled2/provider/HistoryProvider.dart';
 import 'package:untitled2/widgets/CardLecture.dart';
 
 class Body extends StatelessWidget {
-  const Body({Key key}) : super(key: key);
+  const Body({Key? key}) : super(key: key);
 
   void _build(BuildContext context) {
     Provider.of<HistoryProvider>(context).getStudentHistoryLecturers();

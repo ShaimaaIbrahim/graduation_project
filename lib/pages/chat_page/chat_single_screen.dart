@@ -7,7 +7,7 @@ class SingleChat extends StatelessWidget {
   final receiver;
   final sender;
 
-  const SingleChat({Key key, this.receiver, this.sender}) : super(key: key);
+  const SingleChat({Key? key, this.receiver, this.sender}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -5,16 +5,22 @@ import 'package:untitled2/provider/StudentProvider.dart';
 import 'package:untitled2/utilities/constants.dart';
 import 'Body.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_background_location/flutter_background_location.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:background_location/background_location.dart';
 
 class DoctorMainScreen extends StatefulWidget {
-  const DoctorMainScreen({Key key}) : super(key: key);
+  const DoctorMainScreen({Key? key}) : super(key: key);
 
   @override
   _DoctorMainScreenState createState() => _DoctorMainScreenState();
 }
 
 class _DoctorMainScreenState extends State<DoctorMainScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     _build(context);
@@ -51,26 +57,22 @@ class _DoctorMainScreenState extends State<DoctorMainScreen> {
   }
 }
 
-void _build(BuildContext context) {
+void _build(BuildContext context) async {
+  var position1;
+
   Provider.of<DoctorMainScreenProvider>(context, listen: false)
       .getOnlyMySections();
 
   Provider.of<DoctorMainScreenProvider>(context, listen: false).getMyInfo();
   Provider.of<StudentProvider>(context, listen: false).getAllStudents();
 
-  FlutterBackgroundLocation.startLocationService();
-  FlutterBackgroundLocation.getLocationUpdates((location) {
-    getDoctorLastLocation(context, location);
+  BackgroundLocation.startLocationService();
+  BackgroundLocation.getLocationUpdates((position) {
+    position1 = position;
+    print(
+        "doctor location is lat: ${position.latitude.toString()} + long: ${position.latitude.toString()}");
   });
-}
-
-void getDoctorLastLocation(context, position) async {
-  final snackBar = SnackBar(content: Text('Yay! A SnackBar!'));
-  Scaffold.of(context).showSnackBar(snackBar);
-
-  print(
-      "doctor location is lat: ${position.latitude.toString()} + long: ${position.latitude.toString()}");
 
   Provider.of<DoctorMainScreenProvider>(context, listen: false)
-      .saveDoctorLocation(context, position);
+      .saveDoctorLocation(context, position1);
 }

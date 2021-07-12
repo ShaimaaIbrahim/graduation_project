@@ -8,7 +8,8 @@ class CardSection extends StatelessWidget {
   final String section;
   final department;
 
-  const CardSection({Key key, this.index, this.section, this.department})
+  const CardSection(
+      {Key? key, required this.index, required this.section, this.department})
       : super(key: key);
 
   @override
@@ -57,8 +58,8 @@ class CardSection extends StatelessWidget {
                     value: provider.mySections[index].checked,
                     checkColor: primaryDark,
                     activeColor: textOnPrimary,
-                    onChanged: (bool val) {
-                      provider.setChecked(index, val);
+                    onChanged: (bool? val) {
+                      provider.setChecked(index, val!);
                     }),
               ),
             );

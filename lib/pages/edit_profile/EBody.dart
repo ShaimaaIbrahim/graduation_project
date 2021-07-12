@@ -4,7 +4,7 @@ import 'package:untitled2/model/Doctor.dart';
 import 'package:untitled2/provider/EditProfileProvider.dart';
 import 'package:untitled2/utilities/constants.dart';
 
-EditProfileProvider provider;
+EditProfileProvider? provider;
 
 class EBody extends StatelessWidget {
   final Doctor me;
@@ -13,7 +13,10 @@ class EBody extends StatelessWidget {
   final TextEditingController bioController;
 
   EBody(
-      {this.me, this.nameController, this.emailController, this.bioController});
+      {required this.me,
+      required this.nameController,
+      required this.emailController,
+      required this.bioController});
 
   @override
   Widget build(BuildContext context) {

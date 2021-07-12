@@ -12,10 +12,10 @@ import 'package:untitled2/provider/ChatProvider.dart';
 import 'package:untitled2/provider/StudentMainScreenProvider.dart';
 import 'package:untitled2/widgets/CardLecture.dart';
 
-CameraDescription cameraDescription;
+CameraDescription? cameraDescription;
 
 class Body extends StatelessWidget {
-  const Body({Key key}) : super(key: key);
+  const Body({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +44,17 @@ class Body extends StatelessWidget {
                         mainScreenProvider.myLectures.length, (index) {
                       return InkWell(
                         onTap: () {
-                          checkEntryToLecture(
-                              context, mainScreenProvider.myLectures[index]);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      DetectionAbscence(
+                                        cameraDescription: cameraDescription,
+                                        lecture: mainScreenProvider
+                                            .myLectures[index],
+                                      )));
+                          /*  checkEntryToLecture(
+                              context, mainScreenProvider.myLectures[index]);*/
                         },
                         child: CardLecture(
                           visible: false,
@@ -98,11 +107,11 @@ void checkEntryToLecture(context, Lecture lecture) {
   DateTime addedDuration;
 
   if (lecture.timeType == "ساعة") {
-    addedDuration =
-        currentTime.add(Duration(hours: int.parse(lecture.timeAllowed.trim())));
+    addedDuration = currentTime
+        .add(Duration(hours: int.parse(lecture.timeAllowed!.trim())));
   } else {
     addedDuration = currentTime
-        .add(Duration(minutes: int.parse(lecture.timeAllowed.trim())));
+        .add(Duration(minutes: int.parse(lecture.timeAllowed!.trim())));
   }
 
   var distance = 3.0;
@@ -111,9 +120,9 @@ void checkEntryToLecture(context, Lecture lecture) {
   });
 
   if (distance <= 2.0) {
-    if ((currentTime.isAfter(lecture.dateTime.toDate()) &&
+    if ((currentTime.isAfter(lecture.dateTime!.toDate()) &&
             currentTime.isBefore(addedDuration)) ||
-        currentTime == lecture.dateTime.toDate()) {
+        currentTime == lecture.dateTime!.toDate()) {
       Navigator.push(
           context,
           MaterialPageRoute(

@@ -5,7 +5,7 @@ class SendButton extends StatelessWidget {
   final String text;
   final VoidCallback callback;
 
-  SendButton({this.text, this.callback});
+  SendButton({required this.text, required this.callback});
 
   @override
   Widget build(BuildContext context) {

@@ -4,7 +4,7 @@ import 'package:untitled2/utilities/constants.dart';
 import 'Body.dart';
 
 class ColleguesScreen extends StatelessWidget {
-  const ColleguesScreen({Key key}) : super(key: key);
+  const ColleguesScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

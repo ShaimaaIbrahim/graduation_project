@@ -19,13 +19,13 @@ class FaceNetService {
 
   DataBaseService _dataBaseService = DataBaseService();
 
-  tflite.Interpreter _interpreter;
+  tflite.Interpreter? _interpreter;
 
   double threshold = 1.0;
 
-  List _predictedData;
+  List? _predictedData;
 
-  List get predictedData => this._predictedData;
+  List get predictedData => this._predictedData!;
 
   //  saved users data
   dynamic data = {};
@@ -50,19 +50,19 @@ class FaceNetService {
 
     /// then reshapes input and ouput to model format 🧑‍🔧
     input = input.reshape([1, 112, 112, 3]);
-    List output = List(1 * 192).reshape([1, 192]);
+    List output = List.filled(1 * 192, null, growable: false).reshape([1, 192]);
 
     /// runs and transforms the data 🤖
-    this._interpreter.run(input, output);
+    this._interpreter!.run(input, output);
     output = output.reshape([192]);
 
     this._predictedData = List.from(output);
   }
 
   /// takes the predicted data previously saved and do inference
-  String predict() {
+  String? predict() {
     /// search closer user prediction if exists
-    return _searchResult(this._predictedData);
+    return _searchResult(this._predictedData!);
   }
 
   /// _preProess: crops the image to be more easy
@@ -100,11 +100,11 @@ class FaceNetService {
     var img = imglib.Image(width, height);
     const int hexFF = 0xFF000000;
     final int uvyButtonStride = image.planes[1].bytesPerRow;
-    final int uvPixelStride = image.planes[1].bytesPerPixel;
+    final int? uvPixelStride = image.planes[1].bytesPerPixel;
     for (int x = 0; x < width; x++) {
       for (int y = 0; y < height; y++) {
-        final int uvIndex =
-            uvPixelStride * (x / 2).floor() + uvyButtonStride * (y / 2).floor();
+        final int uvIndex = uvPixelStride! * (x / 2).floor() +
+            uvyButtonStride * (y / 2).floor();
         final int index = y * width + x;
         final yp = image.planes[0].bytes[index];
         final up = image.planes[1].bytes[uvIndex];
@@ -143,8 +143,9 @@ class FaceNetService {
 
   /// searchs the result in the DDBB (this function should be performed by Backend)
   /// [predictedData]: Array that represents the face by the MobileFaceNet model
-  String _searchResult(List predictedData) {
+  String? _searchResult(List predictedData) {
     /// loads 'database' 🙄
+    _dataBaseService.loadDB();
     data = _dataBaseService.db;
 
     print("start search result in=====================================");
@@ -152,7 +153,7 @@ class FaceNetService {
 
     double minDist = 999;
     double currDist = 0.0;
-    String predRes;
+    String? predRes;
 
     /// if no faces saved
     if (data.length == 0) return null;
@@ -172,7 +173,7 @@ class FaceNetService {
     } catch (e) {
       print("catch error search result is $e=======================");
     }
-    return predRes;
+    return predRes!;
   }
 
   /// Adds the power of the difference between each point

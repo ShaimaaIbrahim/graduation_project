@@ -74,7 +74,7 @@ class PrecenceProvider extends ChangeNotifier {
 
     if (preferences.getBool('doctorExistence') != null &&
         preferences.getString('doctorId') != null) {
-      doctorId = preferences.getString('doctorId');
+      doctorId = preferences.getString('doctorId')!;
 
       print("doctor preferences id is $doctorId ");
 
@@ -125,7 +125,7 @@ class PrecenceProvider extends ChangeNotifier {
 
       await FirebaseFirestore.instance
           .collection('presence')
-          .doc(lec.name + lec.time)
+          .doc(lec.name! + lec.time!)
           .collection('students')
           .doc()
           .set({
@@ -161,7 +161,7 @@ class PrecenceProvider extends ChangeNotifier {
 
       var students = await FirebaseFirestore.instance
           .collection('presence')
-          .doc(lec.name + lec.time)
+          .doc(lec.name! + lec.time!)
           .collection('students')
           .get()
           .catchError((error) {

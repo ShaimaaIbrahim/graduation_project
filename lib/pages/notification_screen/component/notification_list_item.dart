@@ -3,7 +3,7 @@ import 'package:path/path.dart';
 import 'package:untitled2/model/lecture.dart';
 
 class NotificationListItem extends StatefulWidget {
-  Lecture lecture;
+  Lecture? lecture;
 
   NotificationListItem({this.lecture});
 
@@ -33,7 +33,7 @@ class _NotificationListItemState extends State<NotificationListItem> {
             ),
             Expanded(
                 child: Text(
-              '${widget.lecture.name} will hold at ${widget.lecture.time}',
+              '${widget.lecture!.name!} will hold at ${widget.lecture!.time}',
               style: TextStyle(fontSize: 15),
             )),
           ],

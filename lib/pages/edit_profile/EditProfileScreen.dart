@@ -9,9 +9,9 @@ TextEditingController nameTextFieldValue = TextEditingController();
 TextEditingController numberTextFieldValue = TextEditingController();
 
 class EditProfileScreen extends StatefulWidget {
-  final Student me;
+  final Student? me;
 
-  const EditProfileScreen({Key key, this.me}) : super(key: key);
+  const EditProfileScreen({Key? key, this.me}) : super(key: key);
 
   @override
   _EditProfileScreenState createState() => _EditProfileScreenState();
@@ -20,7 +20,7 @@ class EditProfileScreen extends StatefulWidget {
 class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   void didChangeDependencies() {
-    _build(context, widget.me);
+    _build(context, widget.me!);
 
     super.didChangeDependencies();
   }
@@ -39,7 +39,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         iconTheme: IconThemeData(color: primaryDark),
       ),
       body: Body(
-          me: widget.me,
+          me: widget.me!,
           nameTextFieldValue: nameTextFieldValue,
           numberTextFieldValue: numberTextFieldValue),
     );
@@ -47,11 +47,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 }
 
 void _build(BuildContext context, Student me) {
-  nameTextFieldValue.text = me.name;
-  numberTextFieldValue.text = me.number;
+  nameTextFieldValue.text = me.name!;
+  numberTextFieldValue.text = me.number!;
 
   Provider.of<EditProfileProvider>(context, listen: false).initialDepartment =
-      me.department;
+      me.department!;
 
   if (Provider.of<EditProfileProvider>(context, listen: false)
           .initialDepartment ==
@@ -73,5 +73,5 @@ void _build(BuildContext context, Student me) {
         .setSectionsList(takteet_classes);
   }
   Provider.of<EditProfileProvider>(context, listen: false).initialSection =
-      me.section;
+      me.section!;
 }

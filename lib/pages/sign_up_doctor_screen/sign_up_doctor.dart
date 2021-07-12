@@ -20,22 +20,22 @@ class _DoctorSignUpState extends State<DoctorSignUp> {
   bool isShown1 = true;
   bool isShown2 = true;
 
-  String nameTextFieldValue;
-  String emailTexttFieldValue;
-  String passwordTextFieldValue;
-  String confirmPasswordTextFieldValue;
+  String? nameTextFieldValue;
+  String? emailTexttFieldValue;
+  String? passwordTextFieldValue;
+  String? confirmPasswordTextFieldValue;
 
   Future<void> submit() async {
-    if (nameTextFieldValue.isEmpty ||
-        emailTexttFieldValue.isEmpty ||
-        passwordTextFieldValue.isEmpty ||
-        confirmPasswordTextFieldValue.isEmpty) {
+    if (nameTextFieldValue!.isEmpty ||
+        emailTexttFieldValue!.isEmpty ||
+        passwordTextFieldValue!.isEmpty ||
+        confirmPasswordTextFieldValue!.isEmpty) {
       _showMyDialog('Not Leave Empty Fields');
-    } else if (nameTextFieldValue.isNotEmpty &&
-        emailTexttFieldValue.isNotEmpty &&
-        passwordTextFieldValue.isNotEmpty &&
-        confirmPasswordTextFieldValue.isNotEmpty) {
-      if (passwordTextFieldValue != confirmPasswordTextFieldValue) {
+    } else if (nameTextFieldValue!.isNotEmpty &&
+        emailTexttFieldValue!.isNotEmpty &&
+        passwordTextFieldValue!.isNotEmpty &&
+        confirmPasswordTextFieldValue!.isNotEmpty) {
+      if (passwordTextFieldValue! != confirmPasswordTextFieldValue!) {
         _showMyDialog('Confirmed Password is Wrong--');
       } else {
         final result = await Provider.of<DoctorProvider>(context, listen: false)
@@ -92,7 +92,7 @@ class _DoctorSignUpState extends State<DoctorSignUp> {
                 height: 100,
                 width: 100,
                 alignment: Alignment.center,
-                image: AssetImage('assets/images/student.png'),
+                image: AssetImage('assets/images/teacher.png'),
               ),
               SizedBox(
                 height: 10,

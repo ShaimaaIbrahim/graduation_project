@@ -5,11 +5,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled2/utilities/constants.dart';
 
 class MessageItem extends StatefulWidget {
-  final String senderName;
-  final String senderId;
-  final String text;
+  final String? senderName;
+  final String? senderId;
+  final String? text;
 
-  const MessageItem({Key key, this.senderName, this.senderId, this.text})
+  const MessageItem(
+      {Key? key,
+      required this.senderName,
+      required this.senderId,
+      required this.text})
       : super(key: key);
 
   @override
@@ -17,15 +21,15 @@ class MessageItem extends StatefulWidget {
 }
 
 class _MessageItemState extends State<MessageItem> {
-  SharedPreferences preferences;
+  SharedPreferences? preferences;
   FirebaseAuth _auth = FirebaseAuth.instance;
-  User currentUser;
-  String uid;
+  User? currentUser;
+  String? uid;
 
   @override
   Widget build(BuildContext context) {
     currentUser = _auth.currentUser;
-    uid = currentUser.uid;
+    uid = currentUser!.uid;
 
     return Container(
       margin: EdgeInsets.all(16),
@@ -34,7 +38,7 @@ class _MessageItemState extends State<MessageItem> {
             ? CrossAxisAlignment.end
             : CrossAxisAlignment.start,
         children: [
-          Text(widget.senderName),
+          Text(widget.senderName!),
           SizedBox(
             height: 8,
           ),
@@ -46,7 +50,7 @@ class _MessageItemState extends State<MessageItem> {
             child: Container(
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                 child: Text(
-                  widget.text,
+                  widget.text!,
                   style: TextStyle(color: Colors.white),
                 )),
           ),

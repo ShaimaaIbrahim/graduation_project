@@ -4,7 +4,7 @@ import 'package:untitled2/provider/ColleguesProvider.dart';
 import 'package:untitled2/provider/StudentMainScreenProvider.dart';
 
 class Body extends StatelessWidget {
-  const Body({Key key}) : super(key: key);
+  const Body({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +34,9 @@ class Body extends StatelessWidget {
                           child: ListTile(
                             title: Text(
                                 stdData.myCollegues[index].name.toString()),
-                            subtitle: Text(stdData.myCollegues[index].number),
+                            subtitle: Text(stdData.myCollegues[index].number!),
                             leading: Image.asset('assets/images/user.png'),
-                            trailing: Text(stdData.myCollegues[index].section),
+                            trailing: Text(stdData.myCollegues[index].section!),
                           ),
                         );
                       }),

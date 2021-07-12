@@ -9,7 +9,7 @@ class ForgetPassPage extends StatefulWidget {
 }
 
 class _ForgetPassPageState extends State<ForgetPassPage> {
-  String emailTextField;
+  String? emailTextField;
 
   @override
   Widget build(BuildContext context) {

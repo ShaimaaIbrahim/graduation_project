@@ -6,7 +6,7 @@ class RoundedWidget extends StatelessWidget {
   final child;
   final icon;
 
-  const RoundedWidget({Key key, this.icon, this.child}) : super(key: key);
+  const RoundedWidget({Key? key, this.icon, this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -19,7 +19,7 @@ class StudentSignUp extends StatefulWidget {
 }
 
 class _StudentSignUpState extends State<StudentSignUp> {
-  CameraDescription cameraDescription;
+  CameraDescription? cameraDescription;
 
   bool isShown1 = true;
   bool isShown2 = true;
@@ -29,25 +29,25 @@ class _StudentSignUpState extends State<StudentSignUp> {
   String initialSection = arch_classes[0];
   List<String> sections = arch_classes;
 
-  String nameTextFieldValue;
-  String emailTexttFieldValue;
-  String passwordTextFieldValue;
-  String numberTextFieldValue;
-  String confirmPasswordTextFieldValue;
+  String? nameTextFieldValue;
+  String? emailTexttFieldValue;
+  String? passwordTextFieldValue;
+  String? numberTextFieldValue;
+  String? confirmPasswordTextFieldValue;
 
   Future<void> submit() async {
-    if (nameTextFieldValue.isEmpty ||
-        emailTexttFieldValue.isEmpty ||
-        passwordTextFieldValue.isEmpty ||
-        confirmPasswordTextFieldValue.isEmpty ||
-        numberTextFieldValue.isEmpty) {
+    if (nameTextFieldValue!.isEmpty ||
+        emailTexttFieldValue!.isEmpty ||
+        passwordTextFieldValue!.isEmpty ||
+        confirmPasswordTextFieldValue!.isEmpty ||
+        numberTextFieldValue!.isEmpty) {
       _showMyDialog('Not Leave Empty Fields');
-    } else if (nameTextFieldValue.isNotEmpty &&
-        emailTexttFieldValue.isNotEmpty &&
-        passwordTextFieldValue.isNotEmpty &&
-        confirmPasswordTextFieldValue.isNotEmpty &&
-        numberTextFieldValue.isNotEmpty) {
-      if (passwordTextFieldValue != confirmPasswordTextFieldValue) {
+    } else if (nameTextFieldValue!.isNotEmpty &&
+        emailTexttFieldValue!.isNotEmpty &&
+        passwordTextFieldValue!.isNotEmpty &&
+        confirmPasswordTextFieldValue!.isNotEmpty &&
+        numberTextFieldValue!.isNotEmpty) {
+      if (passwordTextFieldValue! != confirmPasswordTextFieldValue!) {
         _showMyDialog('Confirmed Password is Wrong--');
       } else {
         final result =
@@ -162,9 +162,9 @@ class _StudentSignUpState extends State<StudentSignUp> {
                       iconSize: 24,
                       elevation: 16,
                       style: TextStyle(color: Colors.black, fontSize: 18),
-                      onChanged: (String data) {
+                      onChanged: (String? data) {
                         setState(() {
-                          initialDepartment = data;
+                          initialDepartment = data!;
                           if (initialDepartment == departments[0]) {
                             sections = arch_classes;
                             initialSection = arch_classes[0];
@@ -208,9 +208,9 @@ class _StudentSignUpState extends State<StudentSignUp> {
                       iconSize: 24,
                       elevation: 16,
                       style: TextStyle(color: Colors.black, fontSize: 18),
-                      onChanged: (String data) {
+                      onChanged: (String? data) {
                         setState(() {
-                          initialSection = data;
+                          initialSection = data!;
                         });
                       },
                       items: sections

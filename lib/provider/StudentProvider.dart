@@ -6,37 +6,35 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:untitled2/model/Student.dart';
 
 class StudentProvider extends ChangeNotifier {
-  Student _student;
+  Student? _student;
   bool _isLoading = false;
   bool _isAuthenticated = false;
-  List<Student> _allStudents;
+  List<Student>? _allStudents;
 
-  List<Student> get allStudents => _allStudents;
+  List<Student> get allStudents => _allStudents!;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  Student get student => _student;
+  Student get student => _student!;
   bool get isLoading => _isLoading;
 
   bool get isAuthenticated => _isAuthenticated;
 
   Future<Map<String, dynamic>> signUp(
-      {String name,
-      String email,
-      String password,
-      String number,
-      String section,
-      String department,
-      bool abscence}) async {
+      {required String name,
+      required String email,
+      required String password,
+      required String number,
+      required String section,
+      required String department,
+      required bool abscence}) async {
     Map<String, dynamic> result = {'success': false, 'error': null};
 
     _isLoading = true;
     notifyListeners();
     try {
-      final User student = (await _auth.createUserWithEmailAndPassword(
+      final User? student = (await _auth.createUserWithEmailAndPassword(
               email: email, password: password))
           .user;
-
-      print("user email is  " + student.email);
 
       if (student != null) {
         final Map<String, dynamic> userData = {
@@ -85,14 +83,15 @@ class StudentProvider extends ChangeNotifier {
     return result;
   }
 
-  Future<Map<String, dynamic>> signIn({String email, String password}) async {
+  Future<Map<String, dynamic>> signIn(
+      {required String email, required String password}) async {
     final Map<String, dynamic> result = {'success': false, 'error': null};
 
     _isLoading = true;
     notifyListeners();
 
     try {
-      final User user = (await _auth.signInWithEmailAndPassword(
+      final User? user = (await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       ))
@@ -121,7 +120,7 @@ class StudentProvider extends ChangeNotifier {
     final Map<String, dynamic> result = {'success': false, 'error': null};
     final user = _auth.currentUser;
     await _auth.signOut().then((value) {
-      storeAuthUser(user.uid);
+      storeAuthUser(user!.uid);
       result['success'] = true;
     }).catchError((error) {
       result['error'] = error;
@@ -199,10 +198,10 @@ class StudentProvider extends ChangeNotifier {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     bool isAuthenticated;
     preferences.getBool('userExistence') != null
-        ? isAuthenticated = preferences.getBool('userExistence')
+        ? isAuthenticated = preferences.getBool('userExistence')!
         : isAuthenticated = false;
     if (isAuthenticated) {
-      String uId = preferences.getString('studentId');
+      String uId = preferences.getString('studentId')!;
       final userData = await fetchUserData(uId);
       if (userData['success']) {
         _isAuthenticated = true;
@@ -231,7 +230,7 @@ class StudentProvider extends ChangeNotifier {
     Map<String, dynamic> result = {'success': false, 'error': null};
 
     String studentId = "";
-    Student student;
+    Student? student;
 
     _isLoading = true;
     notifyListeners();
@@ -240,7 +239,7 @@ class StudentProvider extends ChangeNotifier {
 
     if (preferences.getBool('studentExistence') != null &&
         preferences.getString('studentId') != null) {
-      studentId = preferences.getString('studentId');
+      studentId = preferences.getString('studentId')!;
 
       print("student preferences id is $studentId ");
 
@@ -262,13 +261,13 @@ class StudentProvider extends ChangeNotifier {
 
       Map<String, dynamic> studentMap = {
         "abscence": true,
-        "name": student.name,
-        "uid": student.uid,
-        "email": student.email,
-        "number": student.number,
-        "password": student.password,
-        "section": student.section,
-        "department": student.department
+        "name": student!.name,
+        "uid": student!.uid,
+        "email": student!.email,
+        "number": student!.number,
+        "password": student!.password,
+        "section": student!.section,
+        "department": student!.department
       };
 
       try {
@@ -297,7 +296,7 @@ class StudentProvider extends ChangeNotifier {
 
   Future<Map<String, dynamic>> getStudentInfo() async {
     String studentId = "";
-    Student student;
+    Student? student;
 
     final Map<String, dynamic> result = {'success': false, 'error': null};
 
@@ -307,7 +306,7 @@ class StudentProvider extends ChangeNotifier {
 
     if (preferences.getBool('userExistence') != null &&
         preferences.getString('studentId') != null) {
-      studentId = preferences.getString('studentId');
+      studentId = preferences.getString('studentId')!;
 
       print("student preferences id is $studentId ");
 
@@ -388,7 +387,7 @@ class StudentProvider extends ChangeNotifier {
     Map<String, dynamic> result = {'success': false, 'error': null};
 
     String studentId = "";
-    Student student;
+    Student? student;
 
     _isLoading = true;
     notifyListeners();
@@ -397,7 +396,7 @@ class StudentProvider extends ChangeNotifier {
 
     if (preferences.getBool('userExistence') != null &&
         preferences.getString('studentId') != null) {
-      studentId = preferences.getString('studentId');
+      studentId = preferences.getString('studentId')!;
 
       print("student preferences id is $studentId ");
 
@@ -419,13 +418,13 @@ class StudentProvider extends ChangeNotifier {
 
       Map<String, dynamic> studentMap = {
         "abscence": true,
-        "name": student.name,
-        "uid": student.uid,
-        "email": student.email,
-        "number": student.number,
-        "password": student.password,
-        "section": student.section,
-        "department": student.department,
+        "name": student!.name,
+        "uid": student!.uid,
+        "email": student!.email,
+        "number": student!.number,
+        "password": student!.password,
+        "section": student!.section,
+        "department": student!.department,
         "imagePath": imageUrl
       };
 

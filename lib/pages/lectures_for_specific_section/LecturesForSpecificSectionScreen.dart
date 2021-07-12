@@ -8,14 +8,14 @@ import 'package:untitled2/utilities/constants.dart';
 import 'Body.dart';
 
 class LecturesForSpecificSectionScreen extends StatelessWidget {
-  final Section section;
+  final Section? section;
 
-  const LecturesForSpecificSectionScreen({Key key, this.section})
+  const LecturesForSpecificSectionScreen({Key? key, this.section})
       : super(key: key);
 
   void _build(context) {
     Provider.of<DoctorMainScreenProvider>(context, listen: false)
-        .getLecturesForSpecificSection(section.section, section.department);
+        .getLecturesForSpecificSection(section!.section, section!.department);
   }
 
   @override

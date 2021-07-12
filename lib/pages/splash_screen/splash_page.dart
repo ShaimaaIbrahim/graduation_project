@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:background_location/background_location.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -26,7 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
   MLVisionService _mlVisionService = MLVisionService();
   DataBaseService _dataBaseService = DataBaseService();
 
-  CameraDescription cameraDescription;
+  CameraDescription? cameraDescription;
   bool loading = true;
 
   bool _isAuthenticated1 = false;
@@ -39,6 +40,8 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   _startUp() async {
+    BackgroundLocation.startLocationService();
+
     List<CameraDescription> cameras = await availableCameras();
 
     /// takes the front camera
@@ -52,7 +55,7 @@ class _SplashScreenState extends State<SplashScreen> {
     await _dataBaseService.loadDB();
     print(
         "modelbd is ${_dataBaseService.db}===================================");
-    await _mlVisionService.initialize();
+    _mlVisionService.initialize();
 
     sleep(Duration(seconds: 10));
 

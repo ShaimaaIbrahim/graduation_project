@@ -18,28 +18,29 @@ class HistoryProvider extends ChangeNotifier {
   var _auth = FirebaseAuth.instance;
   var currentDate = DateTime.now();
 
-  Future<Map<String, dynamic>> getStudentHistoryLecturers() async {
+  Future<void> getStudentHistoryLecturers() async {
     List<Lecture> lecturesData = [];
-    Student student;
+    Student? student;
 
     final Map<String, dynamic> result = {'success': false, 'error': null};
 
     try {
       await db
           .collection('students')
-          .doc(_auth.currentUser.uid)
+          .doc(_auth.currentUser!.uid)
           .get()
           .then((value) => {
                 student = Student(
                   section: value.get('section'),
                   department: value.get('department'),
+                  abscence: false,
                 )
               });
 
       var lectures = await db
           .collection('lectures')
-          .where('section', isEqualTo: student.section)
-          .where('department', isEqualTo: student.department)
+          .where('section', isEqualTo: student!.section!)
+          .where('department', isEqualTo: student!.department!)
           .get();
       lectures.docs.forEach((lec) {
         var lecData = Lecture(
@@ -68,7 +69,7 @@ class HistoryProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<Map<String, dynamic>> getDoctorHistoryLecturers() async {
+  Future<void> getDoctorHistoryLecturers() async {
     List<Lecture> lecturesData = [];
 
     final Map<String, dynamic> result = {'success': false, 'error': null};
@@ -76,7 +77,7 @@ class HistoryProvider extends ChangeNotifier {
     try {
       var lectures = await db
           .collection('lectures')
-          .where('doctorId', isEqualTo: _auth.currentUser.uid)
+          .where('doctorId', isEqualTo: _auth.currentUser!.uid)
           .get();
 
       lectures.docs.forEach((lec) {

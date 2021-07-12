@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:untitled2/utilities/constants.dart';
 
 class DataBaseService {
   DataBaseService._internal();
@@ -11,38 +12,32 @@ class DataBaseService {
     return _cameraServiceService;
   }
 
-  File jsonFile;
+  File? jsonFile;
 
   Map<String, dynamic> _db = Map<String, dynamic>();
 
   Map<String, dynamic> get db => this._db;
 
-  Future loadDB() async {
+  loadDB() async {
     print("start load db =================================");
-
-    var tempDir = Directory("storage/emulated/0/" + DateTime.now().toString());
-    String _embPath = tempDir.path + '/emb.json';
-
-    jsonFile = new File(_embPath);
-
-    if (jsonFile.existsSync()) {
-      _db = json.decode(jsonFile.readAsStringSync());
+    jsonFile = new File(PATH + "emb.json");
+    if (jsonFile!.existsSync()) {
+      _db = json.decode(jsonFile!.readAsStringSync());
     }
   }
 
   Future saveData(String userId, List modelData) async {
-    print("start save data at database class =============================");
-
+    print("start save data at database class =======================");
     _db[userId] = modelData;
 
-    jsonFile.writeAsStringSync(json.encode(_db));
+    jsonFile!.writeAsStringSync(json.encode(_db));
 
-    print("_db[userId] is $modelData ======================================");
+    print("_db[userId] is $modelData ================================");
   }
 
   /// deletes the created users
   cleanDB() {
     this._db = Map<String, dynamic>();
-    jsonFile.writeAsStringSync(json.encode({}));
+    jsonFile!.writeAsStringSync(json.encode({}));
   }
 }

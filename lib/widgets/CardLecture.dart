@@ -4,10 +4,10 @@ import 'package:untitled2/model/lecture.dart';
 import 'package:untitled2/utilities/constants.dart';
 
 class CardLecture extends StatelessWidget {
-  final Lecture lecture;
+  final Lecture? lecture;
   final bool visible;
 
-  const CardLecture({Key key, this.lecture, this.visible}) : super(key: key);
+  const CardLecture({required this.lecture, required this.visible});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class CardLecture extends StatelessWidget {
                   height: 5,
                 ),
                 Text(
-                  lecture.name,
+                  lecture!.name!,
                   style: TextStyle(color: Colors.white, fontSize: 18),
                   textAlign: TextAlign.center,
                 ),
@@ -42,7 +42,7 @@ class CardLecture extends StatelessWidget {
                   height: 10,
                 ),
                 Text(
-                  lecture.date,
+                  lecture!.date!,
                   style: TextStyle(color: Colors.white, fontSize: 16),
                   textAlign: TextAlign.center,
                 ),
@@ -50,7 +50,7 @@ class CardLecture extends StatelessWidget {
                   height: 5,
                 ),
                 Text(
-                  lecture.time,
+                  lecture!.time!,
                   style: TextStyle(color: Colors.white, fontSize: 16),
                   textAlign: TextAlign.center,
                 ),
@@ -71,7 +71,7 @@ class CardLecture extends StatelessWidget {
                   value: false,
                   checkColor: primaryDark,
                   activeColor: textOnPrimary,
-                  onChanged: (bool val) {}),
+                  onChanged: (bool? val) {}),
             ),
           ),
         )

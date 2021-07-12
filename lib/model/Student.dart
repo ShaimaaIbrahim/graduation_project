@@ -1,14 +1,14 @@
 class Student {
-  String uid;
-  String name;
-  String email;
+  String? uid;
+  String? name;
+  String? email;
 
-  String password;
-  String number;
-  String department;
+  String? password;
+  String? number;
+  String? department;
 
-  String section;
-  String imagePath;
+  String? section;
+  String? imagePath;
   bool abscence = false;
 
   Student(
@@ -18,7 +18,7 @@ class Student {
       this.number,
       this.department,
       this.section,
-      this.abscence,
+      required this.abscence,
       this.uid,
       this.imagePath});
 }

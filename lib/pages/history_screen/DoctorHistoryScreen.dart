@@ -4,7 +4,7 @@ import 'package:untitled2/utilities/constants.dart';
 import 'EBody.dart';
 
 class DoctorHistoryScreen extends StatelessWidget {
-  const DoctorHistoryScreen({Key key}) : super(key: key);
+  const DoctorHistoryScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

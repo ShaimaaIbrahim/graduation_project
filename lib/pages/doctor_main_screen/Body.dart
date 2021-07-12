@@ -4,12 +4,12 @@ import 'package:provider/provider.dart';
 import 'package:untitled2/provider/DoctorMainScreenProvider.dart';
 import 'package:untitled2/widgets/CardSection.dart';
 
-Widget content;
+Widget? content;
 
 class Body extends StatelessWidget {
   final DoctorMainScreenProvider mainScreenProvider;
 
-  const Body({Key key, this.mainScreenProvider}) : super(key: key);
+  const Body({Key? key, required this.mainScreenProvider}) : super(key: key);
 
   void _build(context) {
     content = Center(
@@ -33,7 +33,7 @@ class Body extends StatelessWidget {
                 child: CardSection(
                   index: index,
                   department: mainScreenProvider.mySections[index].department,
-                  section: mainScreenProvider.mySections[index].section,
+                  section: mainScreenProvider.mySections[index].section!,
                 ),
               );
             })),
@@ -53,7 +53,8 @@ class Body extends StatelessWidget {
       margin: EdgeInsets.only(left: 16, right: 16, top: 20, bottom: 20),
       child: SingleChildScrollView(
           child: RefreshIndicator(
-              onRefresh: mainScreenProvider.getOnlyMySections, child: content)),
+              onRefresh: mainScreenProvider.getOnlyMySections,
+              child: content!)),
     );
   }
 }

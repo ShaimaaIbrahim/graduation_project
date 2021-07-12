@@ -16,7 +16,7 @@ class StudentMainScreenProvider extends ChangeNotifier {
   List<Lecture> _myLectures = [];
   List<Lecture> get myLectures => _myLectures;
 
-  Student _Me = Student(name: "", number: "", section: "");
+  Student _Me = Student(name: "", number: "", section: "", abscence: false);
 
   Student get Me => _Me;
 
@@ -24,13 +24,13 @@ class StudentMainScreenProvider extends ChangeNotifier {
   var _auth = FirebaseAuth.instance;
   var currentDate = DateTime.now();
 
-  Future<Map<String, dynamic>> getMyInfo() async {
-    Student student;
+  Future<void> getMyInfo() async {
+    Student? student;
     final Map<String, dynamic> result = {'success': false, 'error': null};
     try {
       await db
           .collection('students')
-          .doc(_auth.currentUser.uid)
+          .doc(_auth.currentUser!.uid)
           .get()
           .then((value) => {
                 student = Student(
@@ -43,7 +43,7 @@ class StudentMainScreenProvider extends ChangeNotifier {
                     department: value.get('department'),
                     abscence: value.get('abscence'))
               });
-      _Me = student;
+      _Me = student!;
 
       print("success to get my info -----------");
     } catch (error) {
@@ -62,28 +62,29 @@ class StudentMainScreenProvider extends ChangeNotifier {
                 )));
   }
 
-  Future<Map<String, dynamic>> getStudentTodayLecturers() async {
+  Future<void> getStudentTodayLecturers() async {
     List<Lecture> lecturesData = [];
-    Student student;
+    Student? student;
 
     final Map<String, dynamic> result = {'success': false, 'error': null};
 
     try {
       await db
           .collection('students')
-          .doc(_auth.currentUser.uid)
+          .doc(_auth.currentUser!.uid)
           .get()
           .then((value) => {
                 student = Student(
                   section: value.get('section'),
                   department: value.get('department'),
+                  abscence: false,
                 )
               });
 
       var lectures = await db
           .collection('lectures')
-          .where('section', isEqualTo: student.section)
-          .where('department', isEqualTo: student.department)
+          .where('section', isEqualTo: student!.section!)
+          .where('department', isEqualTo: student!.department)
           .get();
 
       lectures.docs.forEach((lec) {
@@ -100,8 +101,8 @@ class StudentMainScreenProvider extends ChangeNotifier {
           date: lec.get('date'),
           time: lec.get('time'),
         );
-        if (lecData.dateTime.toDate().day == currentDate.day &&
-            lecData.dateTime.toDate().month == currentDate.month) {
+        if (lecData.dateTime!.toDate().day == currentDate.day &&
+            lecData.dateTime!.toDate().month == currentDate.month) {
           lecturesData.add(lecData);
         }
       });

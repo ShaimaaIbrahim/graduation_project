@@ -17,8 +17,8 @@ class MLVisionService {
   // service injection
   CameraService _cameraService = CameraService();
 
-  FaceDetector _faceDetector;
-  FaceDetector get faceDetector => this._faceDetector;
+  FaceDetector? _faceDetector;
+  FaceDetector get faceDetector => this._faceDetector!;
 
   void initialize() {
     this._faceDetector = FirebaseVision.instance.faceDetector(
@@ -52,10 +52,10 @@ class MLVisionService {
 
     /// proces the image and makes inference 🤖
     List<Face> faces =
-        await this._faceDetector.processImage(_firebaseVisionImage);
+        await this._faceDetector!.processImage(_firebaseVisionImage);
 
     print(
-        "faceDetector is ${this._faceDetector.options.mode.toString()}==========================");
+        "faceDetector is ${this._faceDetector!.options.mode.toString()}==========================");
     print("faces are ${faces.length.toString()}==========================");
 
     return faces;

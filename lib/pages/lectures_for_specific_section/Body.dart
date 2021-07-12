@@ -3,11 +3,12 @@ import 'package:provider/provider.dart';
 import 'package:untitled2/model/lecture.dart';
 import 'package:untitled2/provider/DoctorMainScreenProvider.dart';
 import 'package:untitled2/provider/Prescence_provider.dart';
+import 'package:untitled2/services/excel_service.dart';
 import 'package:untitled2/utilities/constants.dart';
 import 'package:untitled2/widgets/CardLecture.dart';
 
 class Body extends StatelessWidget {
-  const Body({Key key}) : super(key: key);
+  const Body({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +27,12 @@ class Body extends StatelessWidget {
             children: List.generate(lecData.myLectures.length, (index) {
               return InkWell(
                 onTap: () {
+                  Provider.of<PrecenceProvider>(context, listen: false)
+                      .getGoneStudentsLecture(lecData.myLectures[index]);
+
+                  Provider.of<PrecenceProvider>(context, listen: false)
+                      .getStudentForSpecificSection(lecData.myLectures[index]);
+
                   storeGoogleSheetStudents(
                       lecData, context, lecData.myLectures[index]);
                 },
@@ -67,16 +74,8 @@ Future<void> storeGoogleSheetStudents(DoctorMainScreenProvider provider,
       gone.add(element);
     }
   });
-
-  all.sort((a, b) => int.parse(a.number).compareTo(int.parse(b.number)));
+  all.sort((a, b) => int.parse(a.number!).compareTo(int.parse(b.number!)));
   provider.navigateToStudentAbsForLecture(context, all, lec);
 
-  List<Map<String, dynamic>> map = List<Map<String, dynamic>>();
-
-  all.forEach((element) {
-    String ab = "no";
-    if (element.abscence) {
-      ab = "yes";
-    }
-  });
+  ExcelService.createNewSheet(all, lec.name! + "_" + lec.section!);
 }

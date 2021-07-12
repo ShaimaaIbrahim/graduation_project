@@ -5,7 +5,6 @@ import 'package:path/path.dart';
 import 'dart:io';
 import 'dart:math' as math;
 import 'package:path/path.dart' show join;
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled2/database/database.dart';
@@ -16,12 +15,14 @@ import 'package:untitled2/services/camera.service.dart';
 import 'package:untitled2/services/facenet.service.dart';
 import 'package:untitled2/services/ml_vision_service.dart';
 import 'package:untitled2/utilities/FacePainter.dart';
+import 'package:path/path.dart' as Path;
+import 'package:untitled2/utilities/constants.dart';
 
 class DetectionAbscence extends StatefulWidget {
-  final Lecture lecture;
-  final CameraDescription cameraDescription;
+  final Lecture? lecture;
+  final CameraDescription? cameraDescription;
 
-  const DetectionAbscence({Key key, this.cameraDescription, this.lecture})
+  const DetectionAbscence({Key? key, this.cameraDescription, this.lecture})
       : super(key: key);
 
   @override
@@ -35,7 +36,7 @@ class _DetectionAbscenceState extends State<DetectionAbscence> {
   FaceNetService _faceNetService = FaceNetService();
   DataBaseService _dataBaseService = DataBaseService();
 
-  Future _initializeControllerFuture;
+  Future? _initializeControllerFuture;
 
   bool cameraInitializated = false;
   bool _detectingFaces = false;
@@ -44,11 +45,11 @@ class _DetectionAbscenceState extends State<DetectionAbscence> {
   // switchs when the user press the camera
   bool _saving = false;
 
-  String imagePath;
-  Size imageSize;
-  Face faceDetected;
-  SharedPreferences preferences;
-  BuildContext context;
+  String? imagePath;
+  Size? imageSize;
+  Face? faceDetected;
+  SharedPreferences? preferences;
+  BuildContext? mContext;
 
   @override
   void initState() {
@@ -67,16 +68,15 @@ class _DetectionAbscenceState extends State<DetectionAbscence> {
   /// starts the camera & start framing faces
   _start() async {
     _initializeControllerFuture =
-        _cameraService.startService(widget.cameraDescription);
+        _cameraService.startService(widget.cameraDescription!);
     await _initializeControllerFuture;
 
     setState(() {
       cameraInitializated = true;
     });
 
-    ///inintialize ml vision for detection
     await _dataBaseService.loadDB();
-    //  await _faceNetService.loadModel();
+    await _faceNetService.loadModel();
     _mlVisionService.initialize();
 
     _frameFaces();
@@ -86,10 +86,7 @@ class _DetectionAbscenceState extends State<DetectionAbscence> {
   _frameFaces() {
     imageSize = _cameraService.getImageSize();
     _cameraService.cameraController.startImageStream((image) async {
-      preferences = await SharedPreferences.getInstance();
-
       if (_cameraService.cameraController != null) {
-        // if its currently busy, avoids overprocessing
         if (_detectingFaces) return;
 
         _detectingFaces = true;
@@ -104,25 +101,22 @@ class _DetectionAbscenceState extends State<DetectionAbscence> {
               });
 
               if (_saving) {
-                _faceNetService.setCurrentPrediction(image, faceDetected);
+                _faceNetService.setCurrentPrediction(image, faceDetected!);
                 var userId = _faceNetService.predict();
 
                 print("saving camera userId is $userId");
 
-                print(
-                    "saving camera userId is ${preferences.getString('studentId')}");
-
-                await Provider.of<StudentProvider>(context, listen: false)
+                await Provider.of<StudentProvider>(mContext!, listen: false)
                     .getStudentInfo();
 
                 var student =
-                    Provider.of<StudentProvider>(context, listen: false)
+                    Provider.of<StudentProvider>(mContext!, listen: false)
                         .student;
 
-                await Provider.of<PrecenceProvider>(context, listen: false)
-                    .storeGoneLectures(widget.lecture, student);
+                await Provider.of<PrecenceProvider>(mContext!, listen: false)
+                    .storeGoneLectures(widget.lecture!, student);
 
-                Navigator.pop(context);
+                Navigator.pop(mContext!);
 
                 setState(() {
                   _saving = false;
@@ -145,7 +139,7 @@ class _DetectionAbscenceState extends State<DetectionAbscence> {
 
   @override
   Widget build(BuildContext context) {
-    this.context = context;
+    this.mContext = context;
 
     Future<void> onShot() async {
       if (faceDetected == null) {
@@ -156,30 +150,28 @@ class _DetectionAbscenceState extends State<DetectionAbscence> {
                 content: Text('No face detected!'),
               );
             });
-        return false;
+        return;
       } else {
-        imagePath =
-            join((await getTemporaryDirectory()).path, '${DateTime.now()}.png');
-
+        await Future.delayed(Duration(milliseconds: 500));
+        //await _cameraService.cameraController.stopImageStream();
+        await Future.delayed(Duration(milliseconds: 200));
+        XFile file = await _cameraService.cameraController.takePicture();
+        imagePath = file.path;
         setState(() {
           _saving = true;
         });
-
-        await Future.delayed(Duration(milliseconds: 500));
-        await _cameraService.cameraController.stopImageStream();
-        await Future.delayed(Duration(milliseconds: 200));
-        await _cameraService.takePicture(imagePath);
-
+        Navigator.pop(context);
         setState(() {
           pictureTaked = true;
         });
 
-        return true;
+        return;
       }
     }
 
     final double mirror = math.pi;
     final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
 
     return Scaffold(
       body: FutureBuilder<void>(
@@ -189,37 +181,25 @@ class _DetectionAbscenceState extends State<DetectionAbscence> {
             if (pictureTaked) {
               return Container(
                 width: width,
+                height: height,
                 child: Transform(
                     alignment: Alignment.center,
-                    child: Image.file(File(imagePath)),
+                    child: Image.file(File(imagePath!)),
                     transform: Matrix4.rotationY(mirror)),
               );
             } else {
-              return Transform.scale(
-                scale: 1.0,
-                child: AspectRatio(
-                  aspectRatio: MediaQuery.of(context).size.aspectRatio,
-                  child: OverflowBox(
-                    alignment: Alignment.center,
-                    child: FittedBox(
-                      fit: BoxFit.fitHeight,
-                      child: Container(
-                        width: width,
-                        height: width /
-                            _cameraService.cameraController.value.aspectRatio,
-                        child: Stack(
-                          fit: StackFit.expand,
-                          children: <Widget>[
-                            CameraPreview(_cameraService.cameraController),
-                            CustomPaint(
-                              painter: FacePainter(
-                                  face: faceDetected, imageSize: imageSize),
-                            ),
-                          ],
-                        ),
-                      ),
+              return Container(
+                width: width,
+                height: height,
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: <Widget>[
+                    CameraPreview(_cameraService.cameraController),
+                    CustomPaint(
+                      painter:
+                          FacePainter(face: faceDetected, imageSize: imageSize),
                     ),
-                  ),
+                  ],
                 ),
               );
             }

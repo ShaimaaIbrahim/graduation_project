@@ -1,3 +1,4 @@
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -61,7 +62,7 @@ class MyApp extends StatelessWidget {
       ],
       child: Listener(
         onPointerDown: (_) {
-          WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
+          WidgetsBinding.instance!.focusManager.primaryFocus?.unfocus();
         },
         child: MaterialApp(
           debugShowCheckedModeBanner: false,

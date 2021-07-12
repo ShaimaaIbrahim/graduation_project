@@ -4,11 +4,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class FacePainter extends CustomPainter {
-  FacePainter({this.imageSize, this.face});
+  FacePainter({required this.imageSize, required this.face});
 
-  final Size imageSize;
-  double scaleX, scaleY;
-  Face face;
+  final Size? imageSize;
+  double? scaleX, scaleY;
+  Face? face;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -16,7 +16,7 @@ class FacePainter extends CustomPainter {
 
     Paint paint;
 
-    if (this.face.headEulerAngleY > 10 || this.face.headEulerAngleY < -10) {
+    if (this.face!.headEulerAngleY > 10 || this.face!.headEulerAngleY < -10) {
       paint = Paint()
         ..style = PaintingStyle.stroke
         ..strokeWidth = 3.0
@@ -28,16 +28,16 @@ class FacePainter extends CustomPainter {
         ..color = Colors.green;
     }
 
-    scaleX = size.width / imageSize.width;
-    scaleY = size.height / imageSize.height;
+    scaleX = size.width / imageSize!.width;
+    scaleY = size.height / imageSize!.height;
 
     canvas.drawRRect(
         _scaleRect(
-            rect: face.boundingBox,
-            imageSize: imageSize,
+            rect: face!.boundingBox,
+            imageSize: imageSize!,
             widgetSize: size,
-            scaleX: scaleX,
-            scaleY: scaleY),
+            scaleX: scaleX!,
+            scaleY: scaleY!),
         paint);
   }
 
@@ -48,11 +48,11 @@ class FacePainter extends CustomPainter {
 }
 
 RRect _scaleRect(
-    {Rect rect,
-    Size imageSize,
-    Size widgetSize,
-    double scaleX,
-    double scaleY}) {
+    {required Rect rect,
+    required Size imageSize,
+    required Size widgetSize,
+    required double scaleX,
+    required double scaleY}) {
   return RRect.fromLTRBR(
       (widgetSize.width - rect.left.toDouble() * scaleX),
       rect.top.toDouble() * scaleY,

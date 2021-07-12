@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator_platform_interface/src/models/position.dart';
 import 'package:untitled2/model/Doctor.dart';
 import 'package:untitled2/model/Section.dart';
 import 'package:untitled2/model/Student.dart';
@@ -28,9 +27,9 @@ class DoctorMainScreenProvider extends ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  Doctor _Me;
+  Doctor? _Me;
 
-  Doctor get Me => _Me;
+  Doctor get Me => _Me!;
 
   var db = FirebaseFirestore.instance;
 
@@ -45,12 +44,12 @@ class DoctorMainScreenProvider extends ChangeNotifier {
   }
 
   Future<Map<String, dynamic>> getMyInfo() async {
-    Doctor doctor;
+    Doctor? doctor;
     final Map<String, dynamic> result = {'success': false, 'error': null};
     try {
       await db
           .collection('doctors')
-          .doc(_auth.currentUser.uid)
+          .doc(_auth.currentUser!.uid)
           .get()
           .then((value) => {
                 doctor = Doctor(
@@ -61,12 +60,13 @@ class DoctorMainScreenProvider extends ChangeNotifier {
                 )
               });
 
-      _Me = doctor;
+      _Me = doctor!;
       notifyListeners();
     } catch (error) {
       print("failed to get my info --------${error.toString()}");
       result['error'] = error;
     }
+    return result;
   }
 
   /////////////////////////////////////////////////////////////////////////////
@@ -83,7 +83,7 @@ class DoctorMainScreenProvider extends ChangeNotifier {
     try {
       await FirebaseFirestore.instance
           .collection('lectures')
-          .where("doctorId", isEqualTo: _auth.currentUser.uid)
+          .where("doctorId", isEqualTo: _auth.currentUser!.uid)
           .get()
           .then((value) {
         value.docs.forEach((lec) {
@@ -130,7 +130,7 @@ class DoctorMainScreenProvider extends ChangeNotifier {
     try {
       await FirebaseFirestore.instance
           .collection('lectures')
-          .where("doctorId", isEqualTo: _auth.currentUser.uid)
+          .where("doctorId", isEqualTo: _auth.currentUser!.uid)
           .where("section", isEqualTo: section)
           .where("department", isEqualTo: department)
           .get()
@@ -193,7 +193,7 @@ class DoctorMainScreenProvider extends ChangeNotifier {
         "department": department,
         "time": time,
         "id": id,
-        "doctorId": _auth.currentUser.uid
+        "doctorId": _auth.currentUser!.uid
       }).catchError((error) {
         result['error'] = error;
         print("error added lecture $error");
@@ -235,7 +235,7 @@ class DoctorMainScreenProvider extends ChangeNotifier {
         "department": department,
         "time": time,
         "id": id,
-        "doctorId": _auth.currentUser.uid
+        "doctorId": _auth.currentUser!.uid
       }).catchError((error) {
         result['error'] = error;
         print("error added notifications $error");
@@ -263,7 +263,7 @@ class DoctorMainScreenProvider extends ChangeNotifier {
     try {
       var lectures = await db
           .collection('lectures')
-          .where('doctorId', isEqualTo: _auth.currentUser.uid)
+          .where('doctorId', isEqualTo: _auth.currentUser!.uid)
           .get();
       lectures.docs.forEach((lec) {
         var lecData = Lecture(
@@ -289,6 +289,8 @@ class DoctorMainScreenProvider extends ChangeNotifier {
     }
     _isLoading = false;
     notifyListeners();
+
+    return result;
   }
 
   void setChecked(int index, bool val) {
@@ -321,7 +323,7 @@ class DoctorMainScreenProvider extends ChangeNotifier {
     try {
       await FirebaseFirestore.instance
           .collection('lectures')
-          .where("doctorId", isEqualTo: _auth.currentUser.uid)
+          .where("doctorId", isEqualTo: _auth.currentUser!.uid)
           .get()
           .then((value) {
         value.docs.forEach((lec) {
@@ -358,9 +360,9 @@ class DoctorMainScreenProvider extends ChangeNotifier {
     }
   }
 
-  void saveDoctorLocation(context, Position position) async {
+  void saveDoctorLocation(context, position) async {
     try {
-      await db.collection("doctorLocation").doc(_auth.currentUser.uid).set({
+      await db.collection("doctorLocation").doc(_auth.currentUser!.uid).set({
         "lat": position.latitude,
         "long": position.longitude
       }).whenComplete(() {});

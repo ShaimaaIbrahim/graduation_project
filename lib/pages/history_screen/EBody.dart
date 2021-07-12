@@ -4,7 +4,7 @@ import 'package:untitled2/provider/HistoryProvider.dart';
 import 'package:untitled2/widgets/CardLecture.dart';
 
 class EBody extends StatelessWidget {
-  const EBody({Key key}) : super(key: key);
+  const EBody({Key? key}) : super(key: key);
 
   void _build(BuildContext context) {
     Provider.of<HistoryProvider>(context, listen: false)

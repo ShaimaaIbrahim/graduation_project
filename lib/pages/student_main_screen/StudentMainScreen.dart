@@ -6,7 +6,7 @@ import 'Body.dart';
 import 'MyDrawer.dart';
 
 class StudentMainScreen extends StatelessWidget {
-  const StudentMainScreen({Key key}) : super(key: key);
+  const StudentMainScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
